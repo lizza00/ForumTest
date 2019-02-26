@@ -1,0 +1,55 @@
+﻿@model WebApp.Models.ViewTopicModel
+
+@{
+    ViewBag.Title = "ViewTopic";
+}
+
+<h2>ViewTopic</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ViewTopicModel</h4>
+        <hr />
+        <table class="table">
+            <tr><td width="60%">Topic</td><td>Author</td><td>Date</td></tr>
+
+            <tr><td>@TempData["name"]@Request.QueryString["Name"]</td><td>@TempData["author"]@Request.QueryString["Author"]</td><td>@TempData["date"]@Request.QueryString["Date"]</td></tr>
+        </table>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.MessageContent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" size="60%">
+                @Html.EditorFor(model => model.MessageContent, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MessageContent, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <table class="table">
+            <tr><td width="60%">Message</td><td>Author</td><td>Date</td></tr>
+            @if (Model != null)
+            {
+                foreach (WebApp.Models.Message i in Model)
+                {
+
+                    <tr><td>@i.Text</td><td>@i.Author</td><td>@i.Date</td></tr>
+                }
+            }
+        </table>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send" class="btn btn-default" onclick="location.href='@Url.Action("AddMessage", "Topic",new{}) %>'" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
